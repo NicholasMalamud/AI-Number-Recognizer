@@ -130,7 +130,7 @@ def center_image(img):
 
     return centered_img
 
-img_path = "my_digit6.png"  # Change this to your image path
+img_path = "HW-Nums\digit1.png"  # Change this to your image path
 img = Image.open(img_path).convert('L')         # Convert to grayscale
 img = ImageOps.invert(img)                      # Invert: MNIST is white-on-black
 img = center_image(img)                         # Center the digit

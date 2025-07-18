@@ -1,4 +1,4 @@
-A simple Convolutional Neural Network (CNN) built with PyTorch that recognizes handwritten digits from the MNIST dataset. You can draw a number, and the model will predict what digit it is (0–9).
+A Convolutional Neural Network (CNN) built with PyTorch that recognizes any handwritten digit after being trained on a large dataset of handwritten numbers. You can draw a number, and the model will predict what digit it is (0–9).
 
 1. Download essential libraries, by going to the console and pasting "pip install torch torchvision matplotlib pillow"
 2. Run NML.py

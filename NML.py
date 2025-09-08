@@ -133,14 +133,6 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
 
-    # --- Define MNIST transforms ---
-    mnist_transform = transforms.ToTensor()
-
-    # --- Only test set needed here initially (used for example predictions later) ---
-    test_data = datasets.MNIST(root="./data", train=False, download=True, transform=mnist_transform)
-    test_loader = DataLoader(test_data, batch_size=64, shuffle=False)
-
-
     # --- Define the CNN model ---
     class CNNNet(nn.Module):
         def __init__(self):
@@ -178,8 +170,11 @@ if __name__ == "__main__":
         model.load_state_dict(torch.load(MODEL_PATH, weights_only=True, map_location=device))
         model.eval()
         print(f"Loaded model weights from {MODEL_PATH}")
-    else:
-        # Only load training data if model doesn't exist
+    else: # Only load training data if model doesn't exist
+        # Define MNIST transforms
+        mnist_transform = transforms.ToTensor()
+
+        # load training data
         train_data = datasets.MNIST(root="./data", train=True, download=True, transform=mnist_transform)
         train_loader = DataLoader(
             train_data,
@@ -208,27 +203,6 @@ if __name__ == "__main__":
 
         torch.save(model.state_dict(), MODEL_PATH)
         print(f"Model saved to {MODEL_PATH}")
-
-        # --- Show predictions on sample test images ---
-        model.eval()
-        examples = enumerate(test_loader)
-        _, (example_data, example_targets) = next(examples)
-        example_data = example_data.to(device)
-
-        with torch.no_grad():
-            output = model(example_data)
-
-        fig = plt.figure(figsize=(12, 6))
-        for i in range(6):
-            plt.subplot(2, 3, i + 1)
-            plt.tight_layout()
-            img = example_data[i].cpu().numpy().squeeze()
-            plt.imshow(img, cmap='gray', interpolation='none')
-            pred_label = output[i].argmax().item()
-            true_label = example_targets[i].item()
-            plt.title(f"Pred: {pred_label}, True: {true_label}")
-            plt.axis('off')
-        plt.show()
 
     # predict image that you drew
     model.eval()
